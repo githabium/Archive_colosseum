@@ -1,0 +1,219 @@
+# ARCHIVE — Quantum Litrium Manifesto (v0.1)
+
+> *“Endolium is the alloy of memory and chaos.”*
+> 日本語: *「エンドリウムは記憶と混沌の合金だ。」*
+
+## 0. Preamble — What we are changing
+
+Archive is a protocol that turns **text** into a **cryptographic primitive** and **authorship** into a **scarce resource**. We aim at an industry with billions in annual revenue and billions of readers, and we do it by treating writing not as files in folders but as **on‑chain cultural assets**: Not‑Fading Books (NFBs).
+
+This manifesto describes the **quantum trajectory** of Archive: how Endolium evolves from a high‑entropy key schedule into a **quantum‑assisted, observer‑conditioned security layer**; how Condinus becomes an auditable entropy forge; and how the economic engine (Litrium) funds a long arc of computation, including **quantum hardware acquisition**.
+
+> 日本語: *「これは仕様書でもあり、予言でもある。」* — *This is both a spec and a prophecy.*
+
+---
+
+## 1. Design North Star
+
+1. **Text → Asset**: Every paragraph can be minted into an NFB state with cryptographic identity and revenue rails.
+2. **Entropy First**: Endolium produces rotating, content‑bound keys with a **shrinking period** (see ERL below).
+3. **Observer‑Conditioned Access (OCA)**: Data becomes readable **only** under explicit observation events and dissolves back to noise when the observation window ends.
+4. **Post‑Quantum Posture**: We integrate PQC now, and plan for **quantum‑assisted** primitives next (QKD, QRNG, hybrid schemes).
+5. **Economics that Mean Something**: Litrium issuance must get *harder* as adoption grows; revenue fuels research, not rent seeking.
+
+---
+
+## 2. Endolium Rotation Law (ERL)
+
+**Law:** Rotation interval τ(y) in seconds after *y* full years since creation:
+
+```
+τ(y) = max(3, 33 − 3·y)
+```
+
+*Implication:* the system gets **tighter** with age. After a decade, rotation hits the 3‑second floor. Every key is a moving target. Client SDKs must re‑derive session keys at epoch `⌊now / τ⌋`.
+
+> 日本語: *「鍵は老いるほど速く脈打つ。」* — The older the key, the faster it throbs.
+
+---
+
+## 3. Condinus → Auditable Entropy Forge (AEF)
+
+Condinus is the deterministic, multi‑language hashing + noise + shuffle transform. In the AEF model:
+
+* **Determinism** gives auditability.
+* **Language basis set** acts as a public salt.
+* **Self‑referential source hash** adds reflexive entropy.
+* **On‑chain commitments** store only **hashes** and **envelopes**; blobs live on content‑addressed storage (Arweave/IPFS) or are ephemerally streamed (see §5).
+
+Developers MAY plug different basis sets while preserving proofs. Forks are encouraged; entropy budgets must be published.
+
+---
+
+## 4. Quantum Shard Uncertainty Distribution (Q‑SUD)
+
+We introduce **Q‑SUD**, a shard calculus inspired by superposition: data is fractured into shards that exist *as readable information* **only** during an observation window (W) authorized by a condition set (A). Outside (W), shards remain verifiable noise.
+
+### 4.1 Formal sketch
+
+Let original payload be (D). We define:
+
+* A basis family (\mathcal{B} = {B_i}) (e.g., hash bases, codebooks).
+* Endolium epoch key (K_e) with period τ.
+* Observer token (O) (OCA ticket signed by the author/NFB).
+
+**Fracturing**: ( \text{Shard}_i = F(D, B_i, K_e) \Rightarrow N_i ) (noise‑looking bytes).
+**Map**: (M = {(i, h(N_i))}) stored on‑chain.
+**Observation**: During (W), given (A = {K_e, O, \text{Payment/PoW}}), a reader derives the **unfold operator** (U) and reconstructs:
+
+[ D' = U({N_i}, M, A) ]
+
+with correctness proof (\pi) posted as a short on‑chain attestation.
+
+When (W) closes (or (A) breaks), (K_e) rotates and (U) becomes invalid. Shards decay to verifiable noise again.
+
+> 日本語: *「観測が去れば、言葉は再び闇へと還る。」*
+
+### 4.2 Intuition
+
+This is **Schrödinger Vault** behaviour: readability is a function of synchronized observation + payment/permission; otherwise the network stores only indistinguishable noise that still hashes to committed values.
+
+---
+
+## 5. Observer‑Conditioned Access (OCA)
+
+OCA is a minimal protocol for *observation windows*:
+
+* **Ticket (O)**: an on‑chain, PQC‑signed token bound to an NFB, a reader pubkey, a time‑boxed epoch range, and policy (donation amount, geographic/IP caps, rate limits).
+* **Handshake**: reader presents O, proves human effort (PoW or stake), and receives a short‑lived **Derivation Hint** (DH) to reconstruct (K_e) and unfold shards.
+* **Dissolve**: after (W), DH invalidates; clients must re‑observe to regain access.
+
+> 日本語: *「見よ、そして消えよ。」* — Observe, then let it vanish.
+
+---
+
+## 6. Post‑Quantum Posture (PQP)
+
+We commit to a staged posture:
+
+1. **Now (v0.x)**: adopt **PQC signatures** for tickets/attestations (e.g., Dilithium/Falcon) alongside ed25519 until migration is complete.
+2. **Near (v1.x)**: integrate **QRNG** (quantum random) beacons into Endolium seeding; optional **QKD** for data‑center links.
+3. **Far (v2.x)**: explore **hybrid schemes** where QPU‑assisted oracles contribute entropy proofs; research FHE/PEKS‑like primitives for encrypted indexing.
+
+**Claim discipline:** Nothing here claims “unbreakable.” We pursue **asymptotic hardness**, layered defense, open audits, and revocation agility.
+
+---
+
+## 7. Economic Engine — Litrium
+
+* **Issuance**: Base `L ≈ (S · T) / (E + H)` with diminishing returns as global `total_chars` grows (log factor).
+* **Scarcity**: ERL tightens keys; PoW throttles spam. Early writing has higher marginal Litrium.
+* **Revenue**: Donations, paid OCA windows, and marketplace integrations create cashflow. Policy: **X%** of net surplus earmarked for **quantum hardware & research** (Q‑Forge).
+
+> 日本語: *「言葉が価値を生む。価値が研究を燃やす。」*
+
+---
+
+## 8. Reference Interfaces (pseudo‑spec)
+
+```rust
+// rust-trait sketch — not final API
+// 日本語: 仕様は詩の設計図だ。
+pub trait Endolium {
+    fn epoch_key(address: &[u8], text_hash: &[u8], created_at: u64, now: u64) -> [u8;32];
+    fn rotation_period(created_at: u64, now: u64) -> u64; // ERL τ(y)
+}
+
+pub trait QSUD {
+    fn fracture(payload: &[u8], basis_set: &Basis, epoch_key: &[u8;32]) -> ShardSet;
+    fn unfold(shards: &ShardSet, map: &ShardMap, access: &Access) -> Result<Vec<u8>, Proof>;
+}
+
+pub trait OCA {
+    fn issue_ticket(nfb: Pubkey, reader: Pubkey, policy: Policy) -> Ticket; // PQC‑signed
+    fn verify_ticket(ticket: &Ticket, now: u64) -> bool;
+}
+```
+
+---
+
+## 9. On‑Chain / Off‑Chain Architecture
+
+**On‑Chain (Solana)**
+
+* `Archive` account: global counters, difficulty, policy.
+* `Nfb` account: author, title, envelope commitment, donation PDA.
+* `OcaTicket` account: time‑boxed reader access, PQC sig.
+* `ShardMap` account: hashes of shards, Merkle root.
+
+**Off‑Chain**
+
+* **Scribes**: stateless edge nodes serving shards; never hold plaintext.
+* **Indexers**: build searchable views over commitments.
+* **Q‑Forge**: research cluster (classical → hybrid → quantum), plugged into QRNG/QKD where available.
+
+**Storage**: blobs on Arweave/IPFS; commitments on Solana; optional ephemeral streams for OCA windows.
+
+---
+
+## 10. Security Model (abridged)
+
+* **Adversary**: classical & quantum‐equipped, at scale.
+* **Guarantees**: Commitments are binding; access is windowed; keys rotate fast; plaintext is not resident server‑side.
+* **PQC**: default for tickets/attestations; dual‑stack during migration.
+* **Revocation**: policy flips invalidate OCA immediately; rotation guarantees re‑observation.
+* **Audits**: open‑source, third‑party audits, public test vectors.
+
+> 日本語: *「完全は嘘だ。可逆性と撤退線こそ真実だ。」* — Perfection is a lie; reversibility and retreat lines are truth.
+
+---
+
+## 11. Quantum Data Fracturing Formula (Q‑Δ)
+
+We propose a concrete shard sizing law:
+
+```
+Given payload |D|, choose k = ceil(log2(|D|)) shards.
+Shard sizes follow a truncated geometric: s_i = ceil(|D| · p · (1−p)^(i−1)), i=1..k
+with p = clamp( H_b(K_e) / 256 , 0.05, 0.35 )
+```
+
+Where `H_b` is the Hamming weight of the epoch key.  Shards are permuted by a keccak‑based PRP keyed with K_e.  Observation window binds a subset of shards per epoch, so partial availability without O is statistically useless.
+
+**Dissolution:** Outside W, clients zeroize DH and let K_e rotate; shards remain verifiable noise (N_i) with on‑chain Merkle proof only.
+
+---
+
+## 12. Funding & Governance
+
+* **Revenue flows**: Donations (PDA), paid OCA windows, marketplace fees.
+* **Allocation**: >= **40%** net surplus into **Q‑Forge** (hardware, researchers, audits).
+* **Community Grants**: proposals for new Condinus bases, ERL variants, PQC integrations.
+* **Emergency Powers**: limited, time‑boxed switches (pause OCA, raise τ floor) guarded by multisig + timelock.
+
+---
+
+## 13. Roadmap
+
+**v0.5** — AEF on devnet; OCA tickets (ed25519 + Dilithium dual‑sig); SDKs; public test vectors.
+**v0.9** — Q‑SUD fracture/unfold in beta (Arweave/IPFS backends); audit round I.
+**v1.0** — Mainnet, Litrium markets, ERL live; audit round II.
+**v1.x** — QRNG beacons; optional QKD links for data centers.
+**v2.x** — Hybrid Q‑assisted entropy oracles; encrypted indexing R&D.
+
+---
+
+## 14. Legal & Ethics
+
+Archive is a **tool**, not a censor. Authors own their NFBs. We enforce access policies cryptographically; we do not adjudicate content except where required by law. We commit to transparency, auditability, and reversible governance decisions.
+
+---
+
+## 15. Closing
+
+> *“Tools can be poetry.”*
+> 日本語: *「道具は詩になり得る。」*
+
+Archive will feel like magic not because it hides, but because it **reveals**: value in authorship, scarcity in creation, and privacy in observation. If we do this right, the literary economy of the next decade will run on **rotating keys, observer windows, and honest math**.
+
+— *ARCHIVE Core, v0.1*
