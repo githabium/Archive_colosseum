@@ -1,0 +1,89 @@
+# Archive — Connectable Platform Layer (v0.1)
+
+Archive is not a closed application.
+Archive is a **plug‑in layer** that makes text itself a blockchain‑addressable substrate.
+
+It can connect into any Solana pipeline — because the core primitives are:
+
+* **NFB** — Not‑Fading Book
+* **NLP** — Non‑Liquid Paper
+* **Litrium** — value emission linked to authorship
+
+These three form a universal interface: text → cryptographic state → economic output.
+
+---
+
+## Why Archive is universally connectable
+
+Because the protocol can operate on top of any Solana environment that supports:
+
+* PDA derivations
+* micropayments
+* deterministic hashing
+
+Archive does not dictate UX.
+Archive exposes **clear, minimal hooks**:
+
+* create NFB
+* append page
+* request observation window
+* handle Litrium accounting
+
+This means any product that needs value assigned to written text, can integrate Archive by calling these primitives.
+
+---
+
+## Innovative point that catches the eye
+
+NLP.
+
+NLP is the missing piece nobody in crypto ever tried to exploit correctly.
+
+It is not a token.
+It is not storage.
+It is **potential**.
+
+When someone owns NLP — they own a right.
+Not an NFT.
+Not a license.
+
+They own the right to **write**.
+
+And the moment they write into NLP — the system starts emitting Litrium.
+
+This is the future of text based value production:
+**symbols become mining units.**
+
+---
+
+## How NLP links to a Litrium chain
+
+The moment a user starts writing into NLP, their stream of symbols becomes:
+
+* irreversible entropy
+* proof of authorship
+* proof of human meaning
+
+This is mined.
+This is converted.
+This becomes Litrium.
+
+From this moment — NLP behaves like a special chain in chain.
+
+The chain of text.
+Inside the chain of Solana.
+Fuelled by Litrium issuance.
+
+---
+
+## Why this matters
+
+Because Solana teams can build on top of this.
+Without friction.
+Without redesign.
+
+Archive is not competition.
+Archive is a **platform layer** that every Solana dApp can plug into to turn its text into value.
+
+This is why Archive will scale.
+This is why Archive is universal.
